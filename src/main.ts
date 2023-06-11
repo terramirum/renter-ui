@@ -8,7 +8,7 @@
 * Copyright 2020 Creative Tim (https://www.creative-tim.com)
 * Licensed under MIT (https://github.com/creativetimofficial/now-ui-kit-angular/blob/master/LICENSE.md)
 
-* Coded by Creative Tim
+* Coded by Emrah Mersinli
 
 =========================================================
 

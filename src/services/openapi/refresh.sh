@@ -1,0 +1,1 @@
+sudo openapi-generator-cli generate -i swagger.yaml -g typescript -o /home/emrahmersinli/code/src/github.com/terramirum/renter-ui/src/services/

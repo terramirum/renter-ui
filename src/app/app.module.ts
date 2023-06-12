@@ -14,6 +14,8 @@ import { DefaultApiRequestFactory } from 'services/apis/DefaultApi';
 import { RentApiRequestFactory } from 'services/apis/RentApi';
 import { ContractApiRequestFactory } from 'services/apis/ContractApi';
 import { WalletApiRequestFactory } from 'services/apis/WalletApi';
+import { ApiFactory } from './app.apifactory';
+import { BaseAPIRequestFactory } from 'services/apis/baseapi';
 
 @NgModule({
     declarations: [
@@ -32,19 +34,19 @@ import { WalletApiRequestFactory } from 'services/apis/WalletApi';
     providers: [
         {
             provide:DefaultApi,
-            useFactory:DefaultApiRequestFactory 
+            useFactory:BaseAPIRequestFactory 
         },
         {
             provide:RentApi,
-            useFactory:RentApiRequestFactory
+            useFactory:BaseAPIRequestFactory
         },
         {
             provide:ContractApi,
-            useFactory:ContractApiRequestFactory
+            useFactory:BaseAPIRequestFactory
         },
         {
             provide:WalletApi,
-            useFactory:WalletApiRequestFactory
+            useFactory:BaseAPIRequestFactory
         }
     ],
     bootstrap: [AppComponent]

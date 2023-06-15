@@ -4578,7 +4578,7 @@ textarea.form-control:active {
 
 .form-check.disabled .form-check-label,
 .form-check.disabled .form-check-label {
-    color: #9A9A9A;
+    color: #090101;
     opacity: .5;
     cursor: not-allowed;
 }
@@ -4643,12 +4643,12 @@ textarea.form-control:active {
 }
 
 .form-check-radio input[type="radio"]:disabled+.form-check-sign {
-    color: #9A9A9A;
+    color: #090101;
 }
 
 .form-check-radio input[type="radio"]:disabled+.form-check-sign::before,
 .form-check-radio input[type="radio"]:disabled+.form-check-sign::after {
-    color: #9A9A9A;
+    color: #090101;
 }
 
 .progress-container {
@@ -5057,14 +5057,14 @@ p {
 .description,
 .card-description,
 .footer-big p {
-    color: #9A9A9A;
+    color: #090101;
     font-weight: 300;
 }
 
 .category {
     text-transform: capitalize;
     font-weight: 700;
-    color: #9A9A9A;
+    color: #090101;
 }
 
 .text-primary {
@@ -5255,7 +5255,7 @@ body {
 .nav-pills .nav-item .nav-link.active,
 .nav-pills .nav-item .nav-link.active:focus,
 .nav-pills .nav-item .nav-link.active:hover {
-    background-color: #9A9A9A;
+    background-color: #090101;
     color: #FFFFFF;
     box-shadow: 0px 5px 35px 0px rgba(0, 0, 0, 0.3);
 }
@@ -6857,7 +6857,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .table-shopping .td-name small {
-    color: #9A9A9A;
+    color: #090101;
     font-size: 0.75em;
     font-weight: 300;
 }
@@ -8031,7 +8031,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .card .author span {
-    color: #9A9A9A;
+    color: #090101;
 }
 
 .card .info {
@@ -9529,7 +9529,7 @@ Created using IcoMoon - icomoon.io
 .section-image .card:not(.card-plain) .info p,
 .section-image .card:not(.card-plain) .info .icon,
 .section-image .card:not(.card-plain) .description {
-    color: #9A9A9A;
+    color: #090101;
 }
 
 .section-image .footer {
@@ -9885,7 +9885,7 @@ Created using IcoMoon - icomoon.io
 [data-background-color]:not([data-background-color="gray"]) .card:not(.card-plain) .card-description,
 [data-background-color]:not([data-background-color="gray"]) .card:not(.card-plain) .category,
 [data-background-color]:not([data-background-color="gray"]) .card:not(.card-plain) .category {
-    color: #9A9A9A;
+    color: #090101;
 }
 
 [data-background-color]:not([data-background-color="gray"]) .card:not(.card-plain) .card-title,

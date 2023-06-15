@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // this is needed!
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app.routing';
@@ -9,46 +9,38 @@ import { ExamplesModule } from './examples/examples.module';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { ContractApi, DefaultApi, RentApi, WalletApi } from '../services'; 
-import { DefaultApiRequestFactory } from 'services/apis/DefaultApi';
-import { RentApiRequestFactory } from 'services/apis/RentApi';
-import { ContractApiRequestFactory } from 'services/apis/ContractApi';
-import { WalletApiRequestFactory } from 'services/apis/WalletApi';
-import { ApiFactory } from './app.apifactory';
-import { BaseAPIRequestFactory } from 'services/apis/baseapi';
+import { Rental } from '../service/Rental';
+import { Wallet } from '../service/Wallet';
+import { Param } from 'service/Param';
+import { DefinePlaceComponent } from './components/defineplace/defineplace.component';
+import { Contract } from 'service/Contract';
+import { NftDefineComponent } from './components/nftdefine/nftdefine.component';
+import { NftRentComponent } from './components/nftrent/nftrent.component';
+import { CommonModule } from '@angular/common';
+import { NftListComponent } from './components/nftlist/nftlist.component';
+
 
 @NgModule({
     declarations: [
         AppComponent,
-        NavbarComponent
+        NavbarComponent,
+        DefinePlaceComponent,
+        NftDefineComponent,
+        NftRentComponent,
+        NftListComponent,
     ],
     imports: [
+        ReactiveFormsModule,
         BrowserAnimationsModule,
         NgbModule,
         FormsModule,
         RouterModule,
         AppRoutingModule,
         ComponentsModule,
-        ExamplesModule
+        ExamplesModule,
+        CommonModule,
     ],
-    providers: [
-        {
-            provide:DefaultApi,
-            useFactory:BaseAPIRequestFactory 
-        },
-        {
-            provide:RentApi,
-            useFactory:BaseAPIRequestFactory
-        },
-        {
-            provide:ContractApi,
-            useFactory:BaseAPIRequestFactory
-        },
-        {
-            provide:WalletApi,
-            useFactory:BaseAPIRequestFactory
-        }
-    ],
+    providers: [Rental, Wallet, Param, Contract],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

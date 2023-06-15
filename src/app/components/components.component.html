@@ -14,7 +14,7 @@
           src="https://marketplace.thornebilisim.com/deneme/svg/logo.svg"
           alt=""
         />
-        <h1 class="h1-seo">Terramirum Rental Demo</h1>
+        <h1 class="h1-seo" style="font-weight: bolder;">Terramirum Rental System</h1>
         <h3>
             Welcome to the future of renting, where NFTs and blockchain technology revolutionize the way we find and secure accommodations. Today, we'll explore the concept of renting an NFT for a specific period of time, allowing users to easily manage their rental agreements and enjoy fast accommodation.
         </h3>
@@ -27,18 +27,18 @@
         <div class="container">
             <h2 class="title">Places to stay</h2>
             <div class="team">
-                <div class="row" *ngFor="let nftClass of nftClasses;">
-                    <div class="col-md-4">
-                        <div class="team-player">
-                            <img src="assets/img/building.png" alt="Thumbnail Image" class="rounded img-fluid img-raised">
-                            <h4 class="title"><a href="/nft/{{nftClass.id}}">{{nftClass.name}}</a> </h4>
-                            <p class="category text-primary">{{nftClass.symbol}}</p>
-                            <p class="description">
-                              {{nftClass.description}}
-                              <a href="{{nftClass.uri}}">more details</a>
-                            </p>
-                        </div>
-                    </div> 
+                <div class="row" >
+                  <div class="col-md-4" *ngFor="let nftClass of nftClasses;">
+                      <div class="team-player">
+                          <img src="assets/img/building.png" alt="Thumbnail Image" class="rounded img-fluid img-raised">
+                          <h4 class="title"><a href="/nftlist/{{nftClass.symbol}}">{{nftClass.name}}</a> </h4>
+                          <p class="category text-primary">{{nftClass.symbol}}</p>
+                          <p class="description">
+                            {{nftClass.description}}
+                            <a href="{{nftClass.uri}}">more details</a>
+                          </p>
+                      </div>
+                  </div> 
                 </div>
             </div>
         </div>

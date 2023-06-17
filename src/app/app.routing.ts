@@ -11,6 +11,7 @@ import { NucleoiconsComponent } from './components/nucleoicons/nucleoicons.compo
 import { DefinePlaceComponent } from './components/defineplace/defineplace.component';
 import { NftListComponent } from './components/nftlist/nftlist.component';
 import { NftDefineComponent } from './components/nftdefine/nftdefine.component';
+import { NftRentComponent } from './components/nftrent/nftrent.component';
 
 const routes: Routes = [
     { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -21,7 +22,9 @@ const routes: Routes = [
     { path: 'examples/profile', component: ProfileComponent },
     { path: 'nft/defineplace', component: DefinePlaceComponent },
     { path: 'nft/define', component: NftDefineComponent },
-    { path: 'nftlist/:symbol', component: NftListComponent }
+    { path: 'nftlist/:symbol', component: NftListComponent },
+    { path: 'nftrent/:chainid/:currency/:nftid', component: NftRentComponent }, 
+    { path: 'nftrent/:chainid/:currency/:nftid/:renter', component: NftRentComponent }, 
 ];
 
 @NgModule({

@@ -33,8 +33,7 @@
                     <div class="col-md-4" *ngFor ="let item of nftDetails">
                         <div class="team-player">                            
                             <img src="{{item.avatarUri}}" alt="" class="rounded img-fluid img-raised">
-                            <h4 class="title"><a href="/nftrent/{{item.classId}}/{{item.id}}">{{item.id}}</a> </h4>
-                            <p class="category text-primary">{{item.id}}</p>
+                            <h4 class="title"><a href="/nftrent/{{item.chainId}}/{{item.currency}}/{{item.id}}"> {{item.currency}} - NFT: {{item.id}}</a> </h4> 
                             <p class="description"> 
                                 <a href="{{item.uri}}">more details</a>
                             </p>

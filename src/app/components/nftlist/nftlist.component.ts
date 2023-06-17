@@ -4,8 +4,7 @@ import { BasePageComponent } from '../components.base';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { TerraConstants } from '../contants';
-import { Rental } from 'service/Rental';
-import { NftDetail, NftDetailResponse } from 'service/data-contracts';
+import { NftDetail, NftDetailResponse } from 'app/models/data-contracts';
 import axios from 'axios';
 
 @Component({
@@ -20,8 +19,7 @@ export class NftListComponent extends BasePageComponent implements OnInit {
   symbol: string;
   nftDetails: Array<NftDetail>;
 
-  constructor(private route: ActivatedRoute,
-    private rental: Rental) {
+  constructor(private route: ActivatedRoute) {
     super();
   }
 
@@ -48,12 +46,13 @@ export class NftListComponent extends BasePageComponent implements OnInit {
   }
 
   getNfts(chainId: string, symbol: string) {
-    let uri = this.nftList;
+    let uri = this.rentalNftsUri;
     uri = uri.replace("{chainid}", chainId)
-    uri = uri.replace("{classid}", symbol)
+    uri = uri.replace("{currency}", symbol)
     axios.get<NftDetailResponse>(uri)
       .then((res) => { 
         this.nftDetails = res.data.nftDetails; 
+        console.log(this.nftDetails);
       })
       .catch((ex) => { 
         this.raiseError(ex);

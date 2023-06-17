@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import axios from "axios";
-import { UpdateChainSettle } from "service/data-contracts";
-import { HttpResponse } from "service/http-client";
+import { UpdateChainSettle } from "app/models/data-contracts"; 
 
 @Component({
     template: `
@@ -16,9 +15,17 @@ import { HttpResponse } from "service/http-client";
 export class BasePageComponent implements OnInit {
 
     basePath = "http://localhost:7171/";
-    mintToken = this.basePath + "wallet/deposit";
-    nftList = this.basePath + "rental/nfts?chainid={chainid}&classid={classid}"
-    txDetail = this.basePath + "tx/detail?txhash={txHash}&chainid={chainId}";
+    contractDeployUri = this.basePath + "contract/deploy";
+    contractVerifyUri = this.basePath + "contract/verify";
+    mintTokenUri = this.basePath + "wallet/deposit";
+    paramChainsUri = this.basePath + "param/chains";
+    paramCoinsUri = this.basePath + "param/coins";
+    rentalClassesUri = this.basePath + "rental/classes?chainid={chainid}&contractowner={contractowner}"
+    rentalNftsUri = this.basePath + "rental/nfts?chainid={chainid}&classid={classid}&currency={currency}";
+    rentalRentersUri = this.basePath + "rental/renters?chainid={chainid}&classid={classid}&currency={currency}&nftid={nftid}&sessionid={sessionid}";
+    rentalSessionsUri = this.basePath + "rental/sessions?chainid={chainid}&classid={classid}&currency={currency}&nftid={nftid}&renter={renter}";
+    rentalRentNftMintUri = this.basePath + "rental/rentnftmint";
+    txDetailUri = this.basePath + "tx/detail?txhash={txHash}&chainid={chainId}";
     delay = ms => new Promise(res => setTimeout(res, ms));
 
     ngOnInit(): void {
@@ -40,7 +47,7 @@ export class BasePageComponent implements OnInit {
 
     checkTransactionStatus(txHash: string, chainId: string, tryNumber: number) {
 
-        let tx = this.txDetail;
+        let tx = this.txDetailUri;
         tx = tx.replace("{chainId}", chainId)
         tx = tx.replace("{txHash}", txHash)
         axios.get<UpdateChainSettle>(tx)

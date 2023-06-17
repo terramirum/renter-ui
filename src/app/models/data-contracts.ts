@@ -1,15 +1,4 @@
-/* eslint-disable */
-/* tslint:disable */
-/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
- * ##                                                           ##
- * ## AUTHOR: acacode                                           ##
- * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
- * ---------------------------------------------------------------
- */
-
-export interface Authentication {
+export class Authentication {
   /**
    * Email of user df
    * in: string
@@ -27,7 +16,7 @@ export interface Authentication {
  * ChainId and address are neccessary to get balance. Currency is optional.
  * Only currencies return in the system defined.
  */
-export interface BalanceRequest {
+export class BalanceRequest {
   /**
    * Taken address from create wallet api
    * @example "tfab1e7sdt95e5lp5jr88c6kuqfdq3rym86gstc2hwr"
@@ -47,7 +36,7 @@ export interface BalanceRequest {
 }
 
 /** Block detail */
-export interface BlockDetail {
+export class BlockDetail {
   /**
    * Latest block of given chain
    * @format int64
@@ -58,7 +47,7 @@ export interface BlockDetail {
 }
 
 /** transaction detail in the block. */
-export interface BlockTran {
+export class BlockTran {
   /** Reciever of the coin or token. */
   receiver?: string;
   /** Sender of the coin or token */
@@ -66,7 +55,7 @@ export interface BlockTran {
   tran?: UpdateChainSettle;
 }
 
-export interface BurnRequest {
+export class BurnRequest {
   /**
    * Taken address from create wallet api
    * @example "tfab1e7sdt95e5lp5jr88c6kuqfdq3rym86gstc2hwr"
@@ -101,7 +90,7 @@ export interface BurnRequest {
 }
 
 /** Chain definition response */
-export interface ChainsResponse {
+export class ChainsResponse {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -115,7 +104,7 @@ export interface ChainsResponse {
 }
 
 /** Coin definition response */
-export interface CoinsResponse {
+export class CoinsResponse {
   /**
    * CoinId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -151,7 +140,7 @@ export interface CoinsResponse {
   precision: number;
 }
 
-export interface DeployContractParameter {
+export class DeployContractParameter {
   /**
    * #MAXSUPPLY
    * #NAME
@@ -169,7 +158,7 @@ export interface DeployContractParameter {
 }
 
 /** Defining smart contract in the system and deploy it to the chain. */
-export interface DeployRequest {
+export class DeployRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -216,7 +205,7 @@ export interface DeployRequest {
 }
 
 /** Smart contract creating result. */
-export interface DeployResponse {
+export class DeployResponse {
   /** Contract Address */
   contractAddress?: string;
   /** Tx hash */
@@ -226,7 +215,7 @@ export interface DeployResponse {
 }
 
 /** mint request is used for deposit api. Contract owner account can make mint operation for any address. */
-export interface MintRequest {
+export class MintRequest {
   /**
    * Taken address from create wallet api
    * @example "tfab1e7sdt95e5lp5jr88c6kuqfdq3rym86gstc2hwr"
@@ -257,7 +246,7 @@ export interface MintRequest {
   txKey?: string;
 }
 
-export interface NftAccessRequest {
+export class NftAccessRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -285,7 +274,7 @@ export interface NftAccessRequest {
   txKey?: string;
 }
 
-export interface NftClass {
+export class NftClass {
   /** description is a brief description of nft classification. Optional */
   description?: string;
   /**
@@ -311,12 +300,12 @@ export interface NftClass {
   uri?: string;
 }
 
-export interface NftClassResponse {
+export class NftClassResponse {
   /** nft classes defined for a contract address */
   nftClasses?: NftClass[];
 }
 
-export interface NftDetail {
+export class NftDetail {
   /** small image url */
   avatarUri?: string;
   /** how many bed include */
@@ -335,12 +324,12 @@ export interface NftDetail {
   wireless?: boolean;
 }
 
-export interface NftDetailResponse {
+export class NftDetailResponse {
   /** nft classes defined for a contract address */
   nftDetails?: NftDetail[];
 }
 
-export interface NftGiveAccessRequest {
+export class NftGiveAccessRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -378,7 +367,7 @@ export interface NftGiveAccessRequest {
   txKey?: string;
 }
 
-export interface NftRentBurnRequest {
+export class NftRentBurnRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -406,7 +395,7 @@ export interface NftRentBurnRequest {
   txKey?: string;
 }
 
-export interface NftRentDate {
+export class NftRentDate {
   /**
    * End date. UTC Format: YYYYMMDDHHMM
    * @format int64
@@ -426,7 +415,7 @@ export interface NftRentDate {
   startDate: number;
 }
 
-export interface NftRentMintRequest {
+export class NftRentMintRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -466,7 +455,7 @@ export interface NftRentMintRequest {
   txKey?: string;
 }
 
-export interface NftRenterRequest {
+export class NftRenterRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -489,7 +478,7 @@ export interface NftRenterRequest {
   sessionId: string;
 }
 
-export interface NftRenterResponse {
+export class NftRenterResponse {
   /**
    * Renter address. Only nft owner can rent.
    * @example "trm1fq5xzwrduvzqeccgjraakk9sql87uttdyr78e7"
@@ -497,7 +486,7 @@ export interface NftRenterResponse {
   renter: string[];
 }
 
-export interface NftSessionRequest {
+export class NftSessionRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -520,12 +509,12 @@ export interface NftSessionRequest {
   renter: string;
 }
 
-export interface NftSessionResponse {
+export class NftSessionResponse {
   nftRentDates?: NftRentDate[];
 }
 
 /** Transfer request to transfer coin, nft, token and make payment. */
-export interface TransferRequest {
+export class TransferRequest {
   /**
    * Amount of coin. It is integer and no decimal. It should be powered by precision. For cosmos generally 6. 1 ATOM=1000000
    * @example "1000000"
@@ -567,7 +556,7 @@ export interface TransferRequest {
 }
 
 /** Txkey and Txhash is returned to the user */
-export interface TransferResponse {
+export class TransferResponse {
   /** Tx key is the given in the request. */
   txKey?: string;
   /** Tx hash is the key for transaction. */
@@ -575,7 +564,7 @@ export interface TransferResponse {
 }
 
 /** transaction settlement information. */
-export interface UpdateChainSettle {
+export class UpdateChainSettle {
   /**
    * Amount
    * @format double
@@ -607,7 +596,7 @@ export interface UpdateChainSettle {
 }
 
 /** Contract verification request after deploying contract. For cosmos based chain, make it twice until taken contract address. */
-export interface VerifyContractRequest {
+export class VerifyContractRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
@@ -626,7 +615,7 @@ export interface VerifyContractRequest {
  * Cosmos based chain returns after two times call. Becuase chain processes the transaction.
  * For solidity, take the flatten file from github and use etherscan to verify your contract.
  */
-export interface VerifyContractResponse {
+export class VerifyContractResponse {
   /**
    * Contract address
    * @example "tfab16jzpxp0e8550c9aht6q9svcux30vtyyyyxv5w2l2djjra46580wsnnytlw"
@@ -634,7 +623,7 @@ export interface VerifyContractResponse {
   contractAddress?: string;
 }
 
-export interface WalletGetRequest {
+export class WalletGetRequest {
   /**
    * Account Id
    * in: int
@@ -654,7 +643,7 @@ export interface WalletGetRequest {
   talentId?: number;
 }
 
-export interface WalletImportRequest {
+export class WalletImportRequest {
   /** @format uint32 */
   accountId?: number;
   chainId?: string;

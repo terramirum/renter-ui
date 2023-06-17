@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TerraConstants } from '../contants';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CDeployRequest, CVerifyContractRequest } from 'app/models/Contract';
-import { Contract } from '../../../service/Contract';
 import { BasePageComponent } from '../components.base';
+import { DeployRequest, TransferResponse, VerifyContractRequest } from 'app/models/data-contracts';
+import axios from 'axios';
 
 @Component({
   selector: 'app-defineplace',
@@ -17,12 +17,12 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
   focus;
   focus1;
   saving = false;
-  deployRequest: CDeployRequest = new CDeployRequest();
+  deployRequest: DeployRequest = new DeployRequest();
   inputForm = new FormGroup({});
   additionalControls: string[] = ["description", "uri"];
 
 
-  constructor(private contract: Contract) {
+  constructor() {
     super();
   }
 
@@ -77,12 +77,12 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
     }
     this.saving = true;
     const req = <any>this.inputForm.value;
-    this.deployRequest = <CDeployRequest>this.inputForm.value;
+    this.deployRequest = <DeployRequest>this.inputForm.value;
     this.deployRequest.contractPatameters = [{ name: "#DESCRIPTION", value: req.description }, { name: "#URI", value: req.uri }]
     this.deployRequest.manageType = "3";
     this.deployRequest.txKey = "1";
     this.deployRequest.contractTemplate = "X";
-    this.contract.contractstore(this.deployRequest).then((res) => {
+    axios.post<TransferResponse>(this.contractDeployUri, this.deployRequest).then((res) => {
       this.delay(3000).then((v) => {
         this.verifyContract(this.deployRequest, 0);
       });
@@ -91,12 +91,12 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
     });
   }
 
-  verifyContract(deployRequest: CDeployRequest, counter: number) {
-    let verifyRequest = new CVerifyContractRequest();
+  verifyContract(deployRequest: DeployRequest, counter: number) {
+    let verifyRequest = new VerifyContractRequest();
     verifyRequest.chainId = deployRequest.chainId;
     verifyRequest.currency = deployRequest.tokenName;
 
-    this.contract.contractverify(verifyRequest).then((res) => {
+    axios.post<TransferResponse>(this.contractVerifyUri, verifyRequest).then((res) => {
       alert(res.data);
     }).catch((ex) => {
       this.delay(2000).then((v) => {

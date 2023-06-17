@@ -1,13 +1,11 @@
 import { Component, OnInit, Renderer2, OnDestroy, NgModule } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbAccordionConfig } from '@ng-bootstrap/ng-bootstrap';
-import * as Rellax from 'rellax';
-import { Rental } from '../../service/Rental';
-import { RequestParams } from '../../service/http-client';
-import { NftClass } from 'service/data-contracts';
-import { HeaderParams, TerraConstants } from './contants';
-import { Param } from 'service/Param';
+import * as Rellax from 'rellax'; 
+import { NftClass, NftClassResponse } from 'app/models/data-contracts';
+import { TerraConstants } from './contants'; 
 import { BasePageComponent } from './components.base';
+import axios from 'axios';
 
 @Component({
     selector: 'app-components',
@@ -40,9 +38,7 @@ export class ComponentsComponent extends BasePageComponent implements OnInit, On
     state_icon_primary = true;
 
     constructor(private renderer: Renderer2,
-        private config: NgbAccordionConfig,
-        private rental: Rental,
-        private param: Param) {
+        private config: NgbAccordionConfig) {
         super();
         config.closeOthers = true;
         config.type = 'info';
@@ -69,25 +65,16 @@ export class ComponentsComponent extends BasePageComponent implements OnInit, On
     }
 
     laodClasses() {
-        this.param.paramchain().then((res) => {
-            console.log(res)
-        }).catch((reason) => {
-            this.raiseError(reason);
-        });;
-
-        const query = {
-            /** Chain id */
-            chainid: TerraConstants.chainId,
-            /** contract owner */
-            contractowner: TerraConstants.contractOwner
-        };
-
-        this.rental.rentalclasses(query).then((res) => {
-            this.nftClasses = res.data.nftClasses
-        }).catch((reason) => {
-            alert(reason);
-            this.raiseError(reason);
-        });
+        let tx = this.rentalClassesUri;
+        tx = tx.replace("{chainid}", TerraConstants.chainId)
+        tx = tx.replace("{contractowner}", TerraConstants.contractOwner)
+        axios.get<NftClassResponse>(tx)
+            .then((res) => {
+                this.nftClasses = res.data.nftClasses
+            })
+            .catch((ex) => {
+                this.raiseError(ex);
+            });
     }
 
     ngOnDestroy() {

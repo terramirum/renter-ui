@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { TerraConstants } from '../contants';
 import { FormControl, FormGroup } from '@angular/forms';
-import { CMintRequest, CNftDetail } from 'app/models/Contract';
 import { BasePageComponent } from '../components.base';
-import { Wallet } from 'service/Wallet';
-import { TransferResponse } from 'service/data-contracts';
-import { HttpResponse } from 'service/http-client';
+import { MintRequest, NftDetail, TransferResponse } from 'app/models/data-contracts';
 import axios, { AxiosResponse } from 'axios';
 
 @Component({
@@ -20,12 +17,12 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
   focus;
   focus1;
   saving = false;
-  mintRequest: CMintRequest = new CMintRequest();
-  nftDetail: CNftDetail = new CNftDetail();
+  mintRequest: MintRequest = new MintRequest();
+  nftDetail: NftDetail = new NftDetail();
   inputForm = new FormGroup({});
   additionalControls: string[] = ["description", "uri"];
 
-  constructor(private wallet: Wallet) {
+  constructor() {
     super();
   }
 
@@ -84,9 +81,9 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
     }
     this.saving = true;
     const req = <any>this.inputForm.value;
-    this.mintRequest = <CMintRequest>this.inputForm.value;
-    this.nftDetail = <CNftDetail>this.inputForm.value;
-    let detail = new CNftDetail()
+    this.mintRequest = <MintRequest>this.inputForm.value;
+    this.nftDetail = <NftDetail>this.inputForm.value;
+    let detail = new NftDetail()
     detail.avatarUri = this.nftDetail.avatarUri;
     detail.bedding = this.nftDetail.bedding;
     detail.chainId = this.nftDetail.chainId;
@@ -98,7 +95,7 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
     this.mintRequest.nftDetail = detail;
 
 
-    axios.post<TransferResponse>(this.mintToken, this.mintRequest)
+    axios.post<TransferResponse>(this.mintTokenUri, this.mintRequest)
       .then((res) => {
         this.checkTransactionStatus(res.data.txnHash, this.mintRequest.chainId, 0);
       })

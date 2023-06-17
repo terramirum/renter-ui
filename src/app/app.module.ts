@@ -9,11 +9,7 @@ import { ExamplesModule } from './examples/examples.module';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { Rental } from '../service/Rental';
-import { Wallet } from '../service/Wallet';
-import { Param } from 'service/Param';
 import { DefinePlaceComponent } from './components/defineplace/defineplace.component';
-import { Contract } from 'service/Contract';
 import { NftDefineComponent } from './components/nftdefine/nftdefine.component';
 import { NftRentComponent } from './components/nftrent/nftrent.component';
 import { CommonModule } from '@angular/common';
@@ -40,7 +36,7 @@ import { NftListComponent } from './components/nftlist/nftlist.component';
         ExamplesModule,
         CommonModule,
     ],
-    providers: [Rental, Wallet, Param, Contract],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

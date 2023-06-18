@@ -499,3 +499,7 @@
         display: none !important;
     }
 }
+
+.input-group-text {
+    color: black;
+}

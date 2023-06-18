@@ -35,6 +35,24 @@ export class BalanceRequest {
   currency: string;
 }
 
+export class BalanceResponse {
+  /**
+   * Amount of coin. It is integer and no decimal. It should be powered by precision.
+   * For cosmos generally 6. 1 ATOM=1000000
+   * For nft, precision is zero. then amount should be 1 to burn it.
+   * Amount is the nft number.
+   * @example "1000000"
+   */
+  amount: number;
+  /**
+   * Currency code is the token short name like GOLD, USD, USDT
+   * It gives as a parameter of TokenName when deploying contract
+   * @example "USD"
+   */
+  currency: string;
+  precision:number;
+}
+
 /** Block detail */
 export class BlockDetail {
   /**
@@ -519,40 +537,40 @@ export class TransferRequest {
    * Amount of coin. It is integer and no decimal. It should be powered by precision. For cosmos generally 6. 1 ATOM=1000000
    * @example "1000000"
    */
-  amount: string;
+  amount: string = '';
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
    * @example "tokenfab-testnet"
    */
-  chainId: string;
+  chainId: string = '';
   /**
    * The currency defined in the system.
    * @example "TFAB"
    */
-  currency: string;
+  currency: string = '';
   /**
    * Taken address from create wallet api
    * @example "tfab1e7sdt95e5lp5jr88c6kuqfdq3rym86gstc2hwr"
    */
-  fromAddress: string;
+  fromAddress: string = '';
   /**
    * Amount of gas.
    * @format uint64
    * @example 200000
    */
-  gasLimit?: number;
+  gasLimit?: number = 0;
   /** Some chain support memo log. It may be shown in the blockexplorer. */
-  memo?: string;
+  memo?: string = '';
   /**
    * To address shuould be taken from the same coin base.
    * @example "tfab1e7sdt95e5lp5jr88c6kuqfdq3rym86gstc2hwr"
    */
-  toAddress: string;
+  toAddress: string = '';
   /**
    * the key given by client with any unique number to take response with that key. If not use you may set empty. Use it to take asynch response.
    * @example "1"
    */
-  txKey?: string;
+  txKey?: string = '';
 }
 
 /** Txkey and Txhash is returned to the user */

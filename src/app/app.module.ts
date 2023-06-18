@@ -12,9 +12,8 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { DefinePlaceComponent } from './components/defineplace/defineplace.component';
 import { NftDefineComponent } from './components/nftdefine/nftdefine.component';
 import { NftRentComponent } from './components/nftrent/nftrent.component';
-import { CommonModule } from '@angular/common';
-import { NftListComponent } from './components/nftlist/nftlist.component';
-
+import { CommonModule, JsonPipe } from '@angular/common';
+import { NftListComponent } from './components/nftlist/nftlist.component'; 
 
 @NgModule({
     declarations: [
@@ -23,7 +22,7 @@ import { NftListComponent } from './components/nftlist/nftlist.component';
         DefinePlaceComponent,
         NftDefineComponent,
         NftRentComponent,
-        NftListComponent,
+        NftListComponent, 
     ],
     imports: [
         ReactiveFormsModule,

@@ -1,45 +1,76 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { TerraConstants } from '../contants';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BasePageComponent } from '../components.base';
-import { NftRentMintRequest, TransferResponse } from 'app/models/data-contracts';
+import { BalanceRequest, BalanceResponse, NftRentMintRequest, TransferResponse } from 'app/models/data-contracts';
 import axios from 'axios';
 import { ActivatedRoute } from '@angular/router';
+import { TransferRequest } from '../../models/data-contracts';
+import { NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-nftrent',
-  templateUrl: './nftrent.component.html'
+  templateUrl: './nftrent.component.html',
+  styleUrls: ['./nftrent.component.css'],
 })
 
-export class NftRentComponent extends BasePageComponent implements OnInit {
+
+
+export class NftRentComponent extends BasePageComponent implements OnInit, AfterViewInit {
+  @ViewChild('classic', { static: true }) classic: NgbModal;
+
   chainId: string;
   contractOwner: string;
   data: Date = new Date();
   focus;
   focus1;
-  saving = false;
   rentMintRequest: NftRentMintRequest = new NftRentMintRequest();
+  transferRequest: TransferRequest = new TransferRequest();
   inputForm = new FormGroup({});
   additionalControls: string[] = ["description", "uri"];
   currency: string;
   nftId: string;
   renter: string;
   renters: string[] = [];
+  balances: BalanceResponse[];
+  withdrawalForm = new FormGroup({});
+  hoveredDate: NgbDate | null = null;
 
-  constructor(private route: ActivatedRoute) {
+  fromDate: NgbDate;
+  toDate: NgbDate | null = null;
+  formatter: any;
+
+  constructor(private route: ActivatedRoute,
+    private modalService: NgbModal,
+    private calendar: NgbCalendar) {
     super();
+    this.fromDate = calendar.getToday();
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
   }
 
-
-
   ngOnInit() {
+    // $(this.rentedDate).daterangepicker({
+    //   timePicker: true,
+    //   startDate: moment().startOf('hour'),
+    //   endDate: moment().startOf('hour').add(32, 'hour'),
+    //   locale: {
+    //     format: 'M/DD hh:mm A'
+    //   }
+    // });
+
     this.rentMintRequest.chainId = TerraConstants.chainId;
     this.rentMintRequest.currency = TerraConstants.contractOwner;
     this.renters = TerraConstants.Renters;
     //this.deployRequest.txKey = "1";
 
+    this.setTransferEndDelegate(this.delegateTransferEnd);
+
     Object.keys(this.rentMintRequest).forEach(name => {
       this.inputForm.addControl(name, new FormControl(this.rentMintRequest[name]));
+    });
+
+    Object.keys(this.transferRequest).forEach(name => {
+      this.withdrawalForm.addControl(name, new FormControl(this.transferRequest[name]));
     });
 
     var body = document.getElementsByTagName('body')[0];
@@ -52,8 +83,13 @@ export class NftRentComponent extends BasePageComponent implements OnInit {
       this.chainId = params['chainid'];
       this.currency = params['currency'];
       this.nftId = params['nftid'];
-      this.renter = params['renter']; 
+      this.renter = params['renter'];
+      this.balance();
     });
+  }
+
+  ngAfterViewInit() {
+
   }
 
   listRents() {
@@ -61,6 +97,7 @@ export class NftRentComponent extends BasePageComponent implements OnInit {
 
     }
   }
+
 
   ngOnDestroy() {
     var body = document.getElementsByTagName('body')[0];
@@ -70,7 +107,61 @@ export class NftRentComponent extends BasePageComponent implements OnInit {
     navbar.classList.remove('navbar-transparent');
   }
 
-  define() {
+  balance() {
+    if (this.renter != undefined && this.renter.length > 0) {
+      let balanceRequest = new BalanceRequest();
+      balanceRequest.address = this.renter;
+      balanceRequest.chainId = this.chainId;
+      axios.post<BalanceResponse[]>(this.balanceUri, balanceRequest).then((res) => {
+        this.balances = res.data;
+      }).catch((ex) => {
+        this.raiseError(ex);
+      });
+    } else {
+      alert('Select any renter.');
+    }
+  }
+
+  delegateTransferEnd(ret: boolean) {
+    if (ret) {
+      this.balance();
+      this.modalService.dismissAll();
+    }
+  }
+
+  withdraw() {
+    this.transferRequest = <TransferRequest>this.withdrawalForm.value;
+    this.transferRequest.chainId = this.chainId;
+    this.transferRequest.fromAddress = this.renter;
+    this.transferRequest.txKey = "1";
+    this.transferRequest.memo = " ";
+    this.transfer(this.transferRequest);
+  }
+
+  withdrawModal(currency: string) {
+
+    this.withdrawalForm.controls["amount"].value = "";
+    this.withdrawalForm.controls["currency"].value = currency;
+    this.openModal(this.modalService, this.classic, '', '');
+  }
+
+  faucet(currency: string) {
+    let req = new TransferRequest();
+    req.amount = "10000000";
+    req.chainId = this.chainId;
+    req.currency = currency;
+    req.fromAddress = TerraConstants.contractOwner;
+    req.toAddress = this.renter;
+    req.txKey = "1";
+    req.memo = " ";
+    this.transfer(req);
+  }
+
+  rentNftModal() {
+
+  }
+
+  rentNft() {
     const controls = this.inputForm.controls;
     if (this.inputForm.invalid) {
       Object.keys(this.rentMintRequest).forEach(name =>
@@ -90,4 +181,12 @@ export class NftRentComponent extends BasePageComponent implements OnInit {
         this.raiseError(ex);
       });
   }
+
+  getFormatedAmount(amount: number, precision: number): string {
+    const amt = amount / Math.pow(10, precision)
+    return amt.toLocaleString('en-us', { minimumFractionDigits: precision })
+  }
+
+  
 }
+

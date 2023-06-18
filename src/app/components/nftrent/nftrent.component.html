@@ -10,41 +10,119 @@
     <div class="row">&nbsp;</div>
     <div class="row">
       <div class="col-md-6 ml-auto mr-auto text-left">
-        <div class="dropdown button-dropdown">
-          <div ngbDropdown> 
+        <div class="row">
+          <div class="col-md-6">
+            <div class="dropdown button-dropdown">
+              <div ngbDropdown>
                 <a class="dropdown-toggle" ngbDropdownToggle>
                   <p class="btn btn-primary">Renters</p>
-                </a> 
-            <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right"> 
-              <div *ngFor="let item of renters;">
-                <a class="dropdown-item" href="/nftrent/{{chainId}}/{{currency}}/{{nftId}}/{{item}}">{{item}}</a>
-              </div>     
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+                  <div *ngFor="let item of renters">
+                    <a
+                      class="dropdown-item"
+                      href="/nftrent/{{ chainId }}/{{ currency }}/{{ nftId }}/{{
+                        item
+                      }}"
+                      >{{ item }}</a
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
-          </div> 
+          </div>
+          <div class="col-md-6" style="vertical-align: middle">
+            <p>{{ renter }}</p>
+          </div>
         </div>
-        <div style="vertical-align: middle;">{{renter}}</div>
       </div>
       <div class="col-md-6 ml-auto mr-auto text-right">
-        <button class="btn btn-primary">Balance</button>
-        <button class="btn btn-secondary  ">Rented Nfts</button>
+        <button class="btn btn-primary" (click)="balance()">Balance</button>
+        <button class="btn btn-secondary">Rented Nfts</button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 ml-auto mr-auto text-left">
+        <h6>Rent Status of the Room</h6>
+      </div>
+      <div class="col-md-6 ml-auto mr-auto text-right">
+        <h6>Renter Wallet of Selected</h6>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 ml-auto mr-auto text-left">tablo</div>
       <div class="col-md-6 ml-auto mr-auto text-left">
         <div class="row">
-          <p>Balance</p>
+          <div class="col-md-12">
+            <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" placeholder="Range">Start Date</span>
+              </div> 
+             
+            </div>  
+          </div>
+          <div class="col-md-12">
+            <button class="btn btn-success" (click)="rentNftModal()">Rent Nft</button>
+          </div>
         </div>
+      </div>
+      <div class="col-md-6 ml-auto mr-auto text-left">
         <div class="row">
-          <p>Balance Response Query</p>
+          <div class="col-md-6" style="height: 20px;"><p class="text-md-right">Amount</p></div>
+          <div class="col-md-6" style="height: 20px;">Currency</div> 
         </div>
-        <div class="row">
-          <p>Balance Response Query</p>
-        </div>
-        <div class="row">
-          <p>Balance Response Query</p>
+        <div class="row" *ngFor="let item of balances">
+          <div class="col-md-6 mr-auto" style="height: 20px;">
+            <p class="text-md-right">{{ getFormatedAmount(item.amount, item.precision) }}</p>
+          </div>
+          <div class="col-md-6 mr-auto"> 
+            <div class="row">
+              <div class="col-md-4" style="height: 20px;">
+                <p class="text-md-left align-middle">{{ item.currency }}</p>
+              </div>
+              <div class="col-md-4">
+                <button [disabled]="saving" class="btn btn-primary btn-sm" style="padding: 1 !important; margin: 0 !important;" (click)="withdrawModal(item.currency)">Withdraw</button>
+              </div>
+              <div class="col-md-4">
+                <button [disabled]="saving" class="btn btn-secondary btn-sm" style="padding: 1 !important; margin: 0 !important;" (click)="faucet(item.currency)" >Faucet</button>
+              </div>
+            </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #classic let-c="close" let-d="dismiss">
+  <div class="modal-header justify-content-center">
+      <button type="button" class="close" (click)="d('Cross click')">
+          <i class="now-ui-icons ui-1_simple-remove"></i>
+      </button>
+      <h4 class="title title-up">Modal title</h4>
+  </div>
+  <div class="modal-body">      
+        <form [formGroup]="withdrawalForm">
+          <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+            <div class="input-group-prepend">
+                <span class="input-group-text" placeholder="To Address"><i class="now-ui-icons text_caps-small"></i></span>
+            </div>
+            <input type="text" formControlName="toAddress" name="toAddress" placeholder="To Address" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+          </div>
+          <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+            <div class="input-group-prepend">
+                <span class="input-group-text" placeholder="Amount"><i class="now-ui-icons text_caps-small"></i></span>
+            </div>
+            <input type="text" formControlName="amount" name="amount" placeholder="Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+          </div>
+          <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+            <div class="input-group-prepend">
+                <span class="input-group-text" placeholder="Currency"><i class="now-ui-icons text_caps-small"></i></span>
+            </div>
+            <input type="text" formControlName="currency" name="currency" placeholder="Currency" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+          </div>
+        </form> 
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="withdraw()">Withdraw</button>
+      <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>

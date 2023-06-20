@@ -5,8 +5,9 @@ import { BasePageComponent } from '../components.base';
 import { BalanceRequest, BalanceResponse, NftRentMintRequest, TransferResponse } from 'app/models/data-contracts';
 import axios from 'axios';
 import { ActivatedRoute } from '@angular/router';
-import { TransferRequest } from '../../models/data-contracts';
+import { TransferRequest, MintRequest } from '../../models/data-contracts';
 import { NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-nftrent',
@@ -18,6 +19,12 @@ import { NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export class NftRentComponent extends BasePageComponent implements OnInit, AfterViewInit {
   @ViewChild('classic', { static: true }) classic: NgbModal;
+  @ViewChild('rentnftmodal', { static: true }) rentnftmodal: NgbModal;
+
+  startDate: string;
+  endDate: string;
+  usdBalance: string;
+  totalAmount: string;
 
   chainId: string;
   contractOwner: string;
@@ -58,10 +65,12 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     //   }
     // });
 
-    this.rentMintRequest.chainId = TerraConstants.chainId;
-    this.rentMintRequest.currency = TerraConstants.contractOwner;
     this.renters = TerraConstants.Renters;
     //this.deployRequest.txKey = "1";
+    const date = (new Date());
+    const mDate = moment(date);
+    this.startDate = mDate.add(15, 'minutes').format('YYYYMMDDHHmm');
+    this.endDate = mDate.add(30, 'minutes').format('YYYYMMDDHHmm');
 
     this.setTransferEndDelegate(this.delegateTransferEnd);
 
@@ -139,7 +148,6 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   }
 
   withdrawModal(currency: string) {
-
     this.withdrawalForm.controls["amount"].value = "";
     this.withdrawalForm.controls["currency"].value = currency;
     this.openModal(this.modalService, this.classic, '', '');
@@ -158,24 +166,52 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   }
 
   rentNftModal() {
+    let usd = "0";
+    this.balances.forEach((item) => {
+      if (item.currency == "TUSD") {
+        usd = this.getFormatedAmount(item.amount, Number(item.currency))
+      }
+    });
 
+    this.usdBalance = usd;
+    this.totalAmount = "20";
+
+    this.openModal(this.modalService, this.rentnftmodal, '', '');
+  }
+
+  rentEnable(): Boolean {
+    if (Number(this.totalAmount) > Number(this.usdBalance)) {
+      return false;
+    }
+    return true;
   }
 
   rentNft() {
-    const controls = this.inputForm.controls;
-    if (this.inputForm.invalid) {
-      Object.keys(this.rentMintRequest).forEach(name =>
-        controls[name].markAsTouched()
-      );
-      return;
-    }
-    this.saving = true;
-    const req = <any>this.inputForm.value;
-    this.rentMintRequest = <NftRentMintRequest>this.inputForm.value;
+    // const controls = this.inputForm.controls;
+    // if (this.inputForm.invalid) {
+    //   Object.keys(this.rentMintRequest).forEach(name =>
+    //     controls[name].markAsTouched()
+    //   );
+    //   return;
+    // }
+    // this.saving = true;
+    // const req = <any>this.inputForm.value;
+    // this.rentMintRequest = <NftRentMintRequest>this.inputForm.value;
 
-    axios.post<TransferResponse>(this.rentalRentNftMintUri, this.rentMintRequest)
+    let mintRequest = new NftRentMintRequest();
+    mintRequest.chainId = this.chainId;
+    mintRequest.currency = this.currency;
+    mintRequest.endDate = Number(this.endDate);
+    mintRequest.nftId = this.nftId;
+    mintRequest.renter = this.renter;
+    mintRequest.startDate = Number(this.startDate);
+    mintRequest.txKey = "1";
+    console.log(mintRequest);
+
+    axios.post<TransferResponse>(this.rentalRentNftMintUri, mintRequest)
       .then((res) => {
-        this.checkTransactionStatus(res.data.txnHash, this.rentMintRequest.chainId, 0);
+        console.log(res);
+        this.checkTransactionStatus(res.data.txnHash, mintRequest.chainId, 0);
       })
       .catch((ex) => {
         this.raiseError(ex);
@@ -187,6 +223,6 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     return amt.toLocaleString('en-us', { minimumFractionDigits: precision })
   }
 
-  
+
 }
 

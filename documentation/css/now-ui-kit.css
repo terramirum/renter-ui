@@ -2661,7 +2661,6 @@ input.datetimepicker[data-color="yellow"]+.bootstrap-datetimepicker-widget.dropd
 .navbar .navbar-nav>a.btn {
     border-width: 2px;
     font-weight: 400;
-    font-size: 0.8571em;
     line-height: 1.35em;
     margin: 5px 1px;
     border: none;
@@ -4167,7 +4166,6 @@ fieldset[disabled] .btn-link.active {
     border-radius: 30px;
     color: #2c2c2c;
     line-height: normal;
-    font-size: 0.8571em;
     -webkit-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
     -moz-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
     -o-transition: color 0.3s ease-in-out, border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
@@ -5684,7 +5682,6 @@ body {
 
 .dropdown-menu .dropdown-item,
 .bootstrap-select .dropdown-menu.inner li a {
-    font-size: 0.8571em;
     padding-top: .6rem;
     padding-bottom: .6rem;
     margin-top: 5px;

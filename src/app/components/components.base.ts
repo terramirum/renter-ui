@@ -100,7 +100,6 @@ export class BasePageComponent implements OnInit {
         if (res.body != undefined && res.body.getReader != undefined) {
             const reader = res.body.getReader();
             data = this.readStream(reader, data);
-            console.log(data)
             return JSON.parse(data) as T;
         } else {
             alert('Unexpected error is occured.');
@@ -113,10 +112,10 @@ export class BasePageComponent implements OnInit {
         let tx = this.txDetailUri;
         tx = tx.replace("{chainId}", chainId);
         tx = tx.replace("{txHash}", txHash);
+        tryNumber++;
         axios
             .get<UpdateChainSettle>(tx)
             .then((res) => {
-                tryNumber++;
                 if (res.data.isSuccessful) {
                     this.saving = false;
                     if (this.transferEndDelegate == null){
@@ -131,12 +130,12 @@ export class BasePageComponent implements OnInit {
             })
             .catch((ex) => {
                 this.delay(1000).then((v) => {
-                    this.checkTransactionStatus(txHash, chainId, tryNumber);
                     if (tryNumber > 3) {
                         alert(ex);
                         this.transferEndDelegate(false);
                         return;
                     }
+                    this.checkTransactionStatus(txHash, chainId, tryNumber);
                 });
             });
     }
@@ -151,7 +150,6 @@ export class BasePageComponent implements OnInit {
             data = this.readStream(reader, data);
             alert(data);
         } else {
-            console.log(ex);
             alert('Unexpected error is occured.');
         }
     }

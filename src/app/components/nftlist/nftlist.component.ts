@@ -52,7 +52,6 @@ export class NftListComponent extends BasePageComponent implements OnInit {
     axios.get<NftDetailResponse>(uri)
       .then((res) => { 
         this.nftDetails = res.data.nftDetails; 
-        console.log(this.nftDetails);
       })
       .catch((ex) => { 
         this.raiseError(ex);

@@ -56,13 +56,21 @@
           <div class="col-md-12">
             <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
               <div class="input-group-prepend">
-                  <span class="input-group-text" placeholder="Range">Start Date</span>
+                  <span class="input-group-text" style="width: 140px;"  placeholder="Range">Start Date</span>
               </div> 
-             
+              <input type="text" [value]="startDate" name="startDate"  class="form-control" placeholder="Start Date" (focus)="focus=true" (blur)="focus=false" >              
             </div>  
           </div>
           <div class="col-md-12">
-            <button class="btn btn-success" (click)="rentNftModal()">Rent Nft</button>
+            <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" style="width: 140px;" placeholder="Range">End Date</span>
+              </div> 
+              <input type="text" [value]="endDate" name="endDate"  class="form-control" placeholder="End Date" (focus)="focus=true" (blur)="focus=false" >              
+            </div>  
+          </div>
+          <div class="col-md-12 content-center">
+            <button class="btn btn-secondary" (click)="rentNftModal()">Rent Nft</button>
           </div>
         </div>
       </div>
@@ -103,19 +111,25 @@
         <form [formGroup]="withdrawalForm">
           <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
             <div class="input-group-prepend">
-                <span class="input-group-text" placeholder="To Address"><i class="now-ui-icons text_caps-small"></i></span>
+              <span class="input-group-text" style="width: 140px;"  placeholder="To Address">
+                To Address
+              </span>  
             </div>
             <input type="text" formControlName="toAddress" name="toAddress" placeholder="To Address" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
           </div>
           <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
             <div class="input-group-prepend">
-                <span class="input-group-text" placeholder="Amount"><i class="now-ui-icons text_caps-small"></i></span>
+              <span class="input-group-text" style="width: 140px;"  placeholder="Amount">
+                Amount
+              </span>
             </div>
             <input type="text" formControlName="amount" name="amount" placeholder="Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
           </div>
           <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
             <div class="input-group-prepend">
-                <span class="input-group-text" placeholder="Currency"><i class="now-ui-icons text_caps-small"></i></span>
+              <span class="input-group-text" style="width: 140px;"  placeholder="Currency">
+                Currency
+              </span>
             </div>
             <input type="text" formControlName="currency" name="currency" placeholder="Currency" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
           </div>
@@ -123,6 +137,40 @@
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-default" (click)="withdraw()">Withdraw</button>
+      <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #rentnftmodal let-c="close" let-d="dismiss">
+  <div class="modal-header justify-content-center">
+      <button type="button" class="close" (click)="d('Cross click')">
+          <i class="now-ui-icons ui-1_simple-remove"></i>
+      </button>
+      <h4 class="title title-up">Rent Nft</h4>
+  </div>
+  <div class="modal-body">       
+    <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+      <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 140px;"  placeholder="Usd Balance">
+            Usd Balance
+          </span>
+      </div>
+      <input type="text" [value]="usdBalance" name="usdBalance" placeholder="Usd Balance" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+    </div>
+    <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+      <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 140px;"  placeholder="Total Amount">
+            Total Amount
+          </span>
+      </div>
+      <input type="text" [value]="totalAmount" name="totalAmount" placeholder="Total Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+    </div>
+    <p *ngIf="!rentEnable()">
+      Please transfer some usd fund from payment channels or exchange.
+    </p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="rentNft()">Rent</button>
       <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

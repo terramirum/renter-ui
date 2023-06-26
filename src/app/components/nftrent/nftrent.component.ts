@@ -131,10 +131,12 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     }
   }
 
-  delegateTransferEnd(ret: boolean) {
+  delegateTransferEnd(ret: boolean, responseMessage: string) {
     if (ret) {
       this.balance();
       this.modalService.dismissAll();
+      if (responseMessage != undefined && responseMessage.length > 0)
+        alert(responseMessage);
     }
   }
 
@@ -210,12 +212,22 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
 
     axios.post<TransferResponse>(this.rentalRentNftMintUri, mintRequest)
       .then((res) => {
-        console.log(res);
         this.checkTransactionStatus(res.data.txnHash, mintRequest.chainId, 0);
       })
       .catch((ex) => {
         this.raiseError(ex);
       });
+  }
+
+  sessions(){
+    let tx = this.rentalSessionsUri;
+    tx = tx.replace("{chainId}", chainId);
+    tx = tx.replace("{txHash}", txHash); 
+    axios.get<UpdateChainSettle>(tx).then((res) => {
+      
+    }).catch((ex)=>{
+      this.raiseError(ex);
+    });
   }
 
   getFormatedAmount(amount: number, precision: number): string {

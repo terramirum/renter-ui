@@ -50,7 +50,7 @@ export class BalanceResponse {
    * @example "USD"
    */
   currency: string;
-  precision:number;
+  precision: number;
 }
 
 /** Block detail */
@@ -256,12 +256,13 @@ export class MintRequest {
   currency: string;
   /** Some chain support memo log. It may be shown in the blockexplorer. */
   memo?: string;
-  nftDetail?: NftDetail;
   /**
    * the key given by client with any unique number to take response with that key. If not use you may set empty. Use it to take asynch response.
    * @example "1"
    */
   txKey?: string;
+  /** Parameter on the github repo template. There is # parameter in the template. */
+  nftParameters: DeployContractParameter[];
 }
 
 export class NftAccessRequest {
@@ -316,6 +317,7 @@ export class NftClass {
    * and NFT `Data` attributes. Optional
    */
   uri?: string;
+  avatarUri?: string;
 }
 
 export class NftClassResponse {

@@ -16,41 +16,48 @@
                     <div class="content">
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">  <i class="now-ui-icons users_circle-08"></i> </span>
+                            <span class="input-group-text" style="width: 150px;">Chain Id</span>
                         </div>
                           <input type="text" formControlName="chainId" name="chainId"  class="form-control" placeholder="Chain Id" (focus)="focus=true" (blur)="focus=false" >
                       </div>
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" placeholder="Contract Owner"><i class="now-ui-icons text_caps-small"></i></span>
+                            <span class="input-group-text" style="width: 150px;" placeholder="Contract Owner">Contract Owner</span>
                         </div>
                           <input type="text"  formControlName="contractOwner" name="contractOwner" placeholder="Contract Owner" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
                       </div>
 
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" placeholder="Contract Name"><i class="now-ui-icons text_caps-small"></i></span>
+                            <span class="input-group-text" style="width: 150px;" placeholder="Contract Name">Contract Name</span>
                         </div>
                           <input type="text"  formControlName="contractName" name="contractName" placeholder="Contract Name" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
                       </div>
 
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" placeholder="Symbol(Short) Name"><i class="now-ui-icons text_caps-small"></i></span>
+                            <span class="input-group-text" style="width: 150px;" placeholder="Symbol(Short) Name">Symbol Name</span>
                         </div>
                           <input type="text"  formControlName="tokenName" name="tokenName" placeholder="Symbol(Short) Name" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
                       </div>
 
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" placeholder="Url"><i class="now-ui-icons text_caps-small"></i></span>
+                            <span class="input-group-text" style="width: 150px;" placeholder="Url">Url</span>
                         </div>
                           <input type="text"  formControlName="uri" name="uri" placeholder="Url" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
                       </div>
 
                       <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" placeholder="Description"><i class="now-ui-icons text_caps-small"></i></span>
+                            <span class="input-group-text" style="width: 150px;" placeholder="Avatar Uri">Avatar Uri</span>
+                        </div>
+                          <input type="text"  formControlName="avatarUri" name="avatarUri" placeholder="Avatar Uri" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+                      </div>
+
+                      <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus1===true}">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" style="width: 150px;" placeholder="Description">Description</span>
                         </div>
                           <textarea class="form-control" formControlName="description" name="description" rows="4" cols="80" placeholder="Description" class="form-control" (focus)="focus1=true" (blur)="focus1=false"></textarea>
                       </div>

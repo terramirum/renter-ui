@@ -58,7 +58,7 @@
               <div class="input-group-prepend">
                   <span class="input-group-text" style="width: 140px;"  placeholder="Range">Start Date</span>
               </div> 
-              <input type="text" [value]="startDate" name="startDate"  class="form-control" placeholder="Start Date" (focus)="focus=true" (blur)="focus=false" >              
+              <input type="text" [(ngModel)]="startDate" [value]="startDate" name="startDate"  class="form-control" placeholder="Start Date" (focus)="focus=true" (blur)="focus=false" >              
             </div>  
           </div>
           <div class="col-md-12">
@@ -66,7 +66,7 @@
               <div class="input-group-prepend">
                   <span class="input-group-text" style="width: 140px;" placeholder="Range">End Date</span>
               </div> 
-              <input type="text" [value]="endDate" name="endDate"  class="form-control" placeholder="End Date" (focus)="focus=true" (blur)="focus=false" >              
+              <input type="text" [(ngModel)]="endDate" [value]="endDate" name="endDate"  class="form-control" placeholder="End Date" (focus)="focus=true" (blur)="focus=false" >              
             </div>  
           </div>
           <div class="col-md-12 content-center">

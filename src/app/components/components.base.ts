@@ -6,7 +6,7 @@ import { CoinsResponse, TransferRequest, VerifyContractRequest } from '../models
 import { TerraConstants } from "./contants";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
-type TransferEnd = (ret: boolean) => void;
+type TransferEnd = (ret: boolean, responseMessage: string) => void;
 
 
 @Component({
@@ -88,7 +88,7 @@ export class BasePageComponent implements OnInit {
         axios
             .post<TransferResponse>(this.transferUri, transferRequest)
             .then((res) => {
-                return this.checkTransactionStatus(res.data.txnHash, transferRequest.chainId, 3);
+                return this.checkTransactionStatus(res.data.txnHash, transferRequest.chainId, 0);
             })
             .catch((ex) => {
                 this.raiseError(ex);
@@ -113,31 +113,28 @@ export class BasePageComponent implements OnInit {
         tx = tx.replace("{chainId}", chainId);
         tx = tx.replace("{txHash}", txHash);
         tryNumber++;
-        axios
-            .get<UpdateChainSettle>(tx)
-            .then((res) => {
-                if (res.data.isSuccessful) {
-                    this.saving = false;
-                    if (this.transferEndDelegate == null){
-                        alert("successful transaction.");
-                    } else {
-                        this.transferEndDelegate(true);
-                    }
+        axios.get<UpdateChainSettle>(tx).then((res) => {
+            if (res.data.isSuccessful) {
+                this.saving = false;
+                if (this.transferEndDelegate == null) {
+                    alert("Successful transaction. " + res.data.error);
                 } else {
-                    alert(res.data.error);
-                    this.transferEndDelegate(false);
+                    this.transferEndDelegate(true, "Successful transaction.");
                 }
-            })
-            .catch((ex) => {
-                this.delay(1000).then((v) => {
-                    if (tryNumber > 3) {
-                        alert(ex);
-                        this.transferEndDelegate(false);
-                        return;
-                    }
-                    this.checkTransactionStatus(txHash, chainId, tryNumber);
-                });
+            } else {
+                alert(res.data.error);
+                this.transferEndDelegate(false, "Failed transaction");
+            }
+        }).catch((ex) => {
+            this.delay(1000).then((v) => {
+                if (tryNumber > 3) {
+                    alert(ex);
+                    this.transferEndDelegate(false, "Exceeded try count.");
+                    return;
+                }
+                this.checkTransactionStatus(txHash, chainId, tryNumber);
             });
+        });
     }
 
 

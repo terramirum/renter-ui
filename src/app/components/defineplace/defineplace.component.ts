@@ -19,7 +19,7 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
   saving = false;
   deployRequest: DeployRequest = new DeployRequest();
   inputForm = new FormGroup({});
-  additionalControls: string[] = ["description", "uri"];
+  additionalControls: string[] = ["description", "uri", "avatarUri"];
 
 
   constructor() {
@@ -32,21 +32,23 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
     this.deployRequest.chainId = TerraConstants.chainId;
     this.deployRequest.contractOwner = TerraConstants.contractOwner;
     this.deployRequest.manageType = "3";
-    this.deployRequest.contractName = "Estate Agents Willesden Green";
-    this.deployRequest.tokenName = "WILLESDEN";
+    this.deployRequest.contractName = "2 Bed Flat, Merino Gardens, E1W";
+    this.deployRequest.tokenName = "MERINOGARDEN";
     //this.deployRequest.txKey = "1";
 
     Object.keys(this.deployRequest).forEach(name => {
       this.inputForm.addControl(name, new FormControl(this.deployRequest[name]));
     });
     // this.additionalControls.forEach(element => {
-    //   this.inputForm.addControl(element, new FormControl(''));
+    //    this.inputForm.addControl(element, new FormControl(''));
     // });
 
-    let des = "Independent Estate Agents in Willesden Green, is a highly successful privately owned estate agents. Our philosophy remains that to be successful we must provide the highest level of personalised service and be at the cutting edge of new technology. At parkinsonfarr Estate Agents, without doubt our clients come first!";
-    let uri = "https://www.rightmove.co.uk/estate-agents/agent/parkinsonfarr/Willesden-Green-29643.html";
+    let des: string = "Nestled in the heart of Wapping, Merino Gardens is an incredible newly built residential development which has access to seven and a half acres of open landscapes spaceand luxury spa and gym facilities. This 2 bedroom, 2 balcony apartment boasts a spacious and modern open plan kitchen and reception area. Both of the bedrooms boast generous proportions and the two bathrooms encompass contemporary design The development has an incredible location with fantastic Zone 1 transport links within walking distance.</p>";
+    let uri: string = "https://www.openrent.co.uk/property-to-rent/london/2-bed-flat-merino-gardens-e1w/1744733";
+    let avatarUri: string ="https://d36pgh4m67wnlt.cloudfront.net/listings/1744733/o_1h3kssbhu2121qtk1671169n189d8.JPG";
     this.inputForm.addControl("description", new FormControl(des));
     this.inputForm.addControl("uri", new FormControl(uri));
+    this.inputForm.addControl("avatarUri", new FormControl(avatarUri));
 
     var body = document.getElementsByTagName('body')[0];
     body.classList.add('login-page');
@@ -78,7 +80,11 @@ export class DefinePlaceComponent extends BasePageComponent implements OnInit {
     this.saving = true;
     const req = <any>this.inputForm.value;
     this.deployRequest = <DeployRequest>this.inputForm.value;
-    this.deployRequest.contractPatameters = [{ name: "#DESCRIPTION", value: req.description }, { name: "#URI", value: req.uri }]
+    this.deployRequest.contractPatameters = [
+      { name: "DESCRIPTION", value: req.description }, 
+      { name: "URI", value: req.uri },
+      { name: "AVATARURI", value: req.avatarUri }
+    ]
     this.deployRequest.manageType = "3";
     this.deployRequest.txKey = "1";
     this.deployRequest.contractTemplate = "X";

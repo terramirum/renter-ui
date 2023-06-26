@@ -30,13 +30,13 @@
                 <div class="row" >
                   <div class="col-md-4" *ngFor="let nftClass of nftClasses;">
                       <div class="team-player">
-                          <img src="assets/img/building.png" alt="Thumbnail Image" class="rounded img-fluid img-raised">
+                          <img src="{{nftClass.avatarUri}}" alt="Thumbnail Image" class="rounded img-fluid img-raised">
                           <h4 class="title"><a href="/nftlist/{{nftClass.symbol}}">{{nftClass.name}}</a> </h4>
                           <p class="category text-primary">{{nftClass.symbol}}</p>
-                          <p class="description">
+                          <div class="description">
                             {{nftClass.description}}
                             <a href="{{nftClass.uri}}">more details</a>
-                          </p>
+                          </div>
                       </div>
                   </div> 
                 </div>

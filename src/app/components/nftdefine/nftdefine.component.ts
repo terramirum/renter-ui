@@ -18,9 +18,8 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
   focus1;
   saving = false;
   mintRequest: MintRequest = new MintRequest();
-  nftDetail: NftDetail = new NftDetail();
   inputForm = new FormGroup({});
-  additionalControls: string[] = ["description", "uri"];
+  additionalControls: string[] = ["uri"];
 
   constructor() {
     super();
@@ -36,20 +35,12 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
     this.mintRequest.amount = "1";
     this.mintRequest.memo = " ";
 
-
-    this.nftDetail.avatarUri = "https://media.rightmove.co.uk/247k/246929/134832998/246929_CAL220075_L_IMG_08_0000.jpeg";
-    this.nftDetail.id = "134832998";
-    this.nftDetail.uri = "https://www.rightmove.co.uk/properties/134832998";
-    this.nftDetail.bedding = "2";
-    this.nftDetail.wireless = true;
-    this.nftDetail.type = "all inclusive";
-
     Object.keys(this.mintRequest).forEach(name => {
       this.inputForm.addControl(name, new FormControl(this.mintRequest[name]));
     });
 
-    Object.keys(this.nftDetail).forEach(name => {
-      this.inputForm.addControl(name, new FormControl(this.nftDetail[name]));
+    this.additionalControls.forEach(element => {
+      this.inputForm.addControl(element, new FormControl(''));
     });
 
     var body = document.getElementsByTagName('body')[0];
@@ -73,28 +64,19 @@ export class NftDefineComponent extends BasePageComponent implements OnInit {
       Object.keys(this.mintRequest).forEach(name =>
         controls[name].markAsTouched()
       );
-
-      Object.keys(this.nftDetail).forEach(name =>
-        controls[name].markAsTouched()
-      );
+      this.additionalControls.forEach(element => {
+        controls[element].markAsTouched()
+      });
       return;
     }
     this.saving = true;
     const req = <any>this.inputForm.value;
     this.mintRequest = <MintRequest>this.inputForm.value;
-    this.nftDetail = <NftDetail>this.inputForm.value;
-    let detail = new NftDetail()
-    detail.avatarUri = this.nftDetail.avatarUri;
-    detail.bedding = this.nftDetail.bedding;
-    detail.chainId = this.nftDetail.chainId;
-    detail.id = this.nftDetail.id;
-    detail.size = this.nftDetail.size;
-    detail.type = this.nftDetail.type;
-    detail.uri = this.nftDetail.uri;
-    detail.wireless = this.nftDetail.wireless;
-    this.mintRequest.nftDetail = detail;
+    this.mintRequest.nftParameters = [ 
+      { name: "URI", value: req.uri }, 
+    ];
 
-
+    console.log(this.mintRequest)
     axios.post<TransferResponse>(this.mintTokenUri, this.mintRequest)
       .then((res) => {
         this.checkTransactionStatus(res.data.txnHash, this.mintRequest.chainId, 0);

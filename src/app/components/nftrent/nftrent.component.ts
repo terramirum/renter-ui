@@ -2,10 +2,10 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { TerraConstants } from '../contants';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BasePageComponent } from '../components.base';
-import { BalanceRequest, BalanceResponse, NftRentMintRequest, TransferResponse } from 'app/models/data-contracts';
+import { BalanceRequest, BalanceResponse, NftAccessRequest, NftGiveAccessRequest, NftRentDate, NftRentMintRequest, NftSendSessionRequest, NftSessionResponse, TransferResponse, UpdateChainSettle } from 'app/models/data-contracts';
 import axios from 'axios';
 import { ActivatedRoute } from '@angular/router';
-import { TransferRequest, MintRequest } from '../../models/data-contracts';
+import { TransferRequest } from '../../models/data-contracts';
 import { NgbCalendar, NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
@@ -20,6 +20,8 @@ import * as moment from 'moment';
 export class NftRentComponent extends BasePageComponent implements OnInit, AfterViewInit {
   @ViewChild('classic', { static: true }) classic: NgbModal;
   @ViewChild('rentnftmodal', { static: true }) rentnftmodal: NgbModal;
+  @ViewChild('grantaccess', { static: true }) grantaccessmodal: NgbModal;
+  @ViewChild('sendsession', { static: true }) sendsessionmodal: NgbModal;
 
   startDate: string;
   endDate: string;
@@ -40,12 +42,20 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   renter: string;
   renters: string[] = [];
   balances: BalanceResponse[];
+  nftRentDates: NftRentDate[];
+  nftRentDateAll: NftRentDate[];
+  
   withdrawalForm = new FormGroup({});
   hoveredDate: NgbDate | null = null;
 
   fromDate: NgbDate;
   toDate: NgbDate | null = null;
   formatter: any;
+
+  sendSessionRentDates: NftRentDate
+  grantAccessRentDates: NftRentDate
+  newSendRenter: string = '';
+  newGrant: string = '';
 
   constructor(private route: ActivatedRoute,
     private modalService: NgbModal,
@@ -126,12 +136,14 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
       }).catch((ex) => {
         this.raiseError(ex);
       });
+      this.walletSessions();
+      this.allSessions();
     } else {
       alert('Select any renter.');
     }
   }
 
-  delegateTransferEnd(ret: boolean, responseMessage: string) {
+  delegateTransferEnd(ret: boolean, responseMessage: string, chainSettle: UpdateChainSettle) {
     if (ret) {
       this.balance();
       this.modalService.dismissAll();
@@ -140,12 +152,26 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     }
   }
 
+  delegateHasAccess(ret: boolean, responseMessage: string, chainSettle: UpdateChainSettle) {
+    if (ret) {
+      if (chainSettle.currency == "1")
+        alert("Accessing Successful");
+      else
+        alert("No Access !!!");
+    }
+  }
+
   withdraw() {
     this.transferRequest = <TransferRequest>this.withdrawalForm.value;
+
+    
+
+    this.transferRequest.amount = Math.trunc(parseFloat(this.transferRequest.amount) * Math.pow(10, 6)).toString()
     this.transferRequest.chainId = this.chainId;
     this.transferRequest.fromAddress = this.renter;
     this.transferRequest.txKey = "1";
-    this.transferRequest.memo = " ";
+    this.transferRequest.memo = " "; 
+    this.setTransferEndDelegate(this.delegateTransferEnd);
     this.transfer(this.transferRequest);
   }
 
@@ -208,10 +234,10 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     mintRequest.renter = this.renter;
     mintRequest.startDate = Number(this.startDate);
     mintRequest.txKey = "1";
-    console.log(mintRequest);
 
     axios.post<TransferResponse>(this.rentalRentNftMintUri, mintRequest)
       .then((res) => {
+        this.setTransferEndDelegate(this.delegateTransferEnd);
         this.checkTransactionStatus(res.data.txnHash, mintRequest.chainId, 0);
       })
       .catch((ex) => {
@@ -219,22 +245,102 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
       });
   }
 
-  sessions(){
-    let tx = this.rentalSessionsUri;
-    tx = tx.replace("{chainId}", chainId);
-    tx = tx.replace("{txHash}", txHash); 
-    axios.get<UpdateChainSettle>(tx).then((res) => {
-      
-    }).catch((ex)=>{
+  walletSessions() {
+    let tx = this.rentalWalletSessionsUri;
+    tx = tx.replace("{chainid}", TerraConstants.chainId);
+    tx = tx.replace("{renter}", this.renter);
+    axios.get<NftSessionResponse>(tx).then((res) => {
+      this.nftRentDates = res.data.nftRentDates;
+    }).catch((ex) => {
       this.raiseError(ex);
     });
   }
+
+  allSessions() {
+    let tx = this.rentalSessionAllUri;
+    tx = tx.replace("{chainid}", TerraConstants.chainId);
+    tx = tx.replace("{nftid}", this.nftId);
+    tx = tx.replace("{currency}", this.currency);
+    axios.get<NftSessionResponse>(tx).then((res) => {
+      this.nftRentDateAll = res.data.nftRentDates;
+    }).catch((ex) => {
+      this.raiseError(ex);
+    });
+  }
+
 
   getFormatedAmount(amount: number, precision: number): string {
     const amt = amount / Math.pow(10, precision)
     return amt.toLocaleString('en-us', { minimumFractionDigits: precision })
   }
 
+  sendSessionModal(rentDates: NftRentDate) {
+    console.log(rentDates);
+    this.sendSessionRentDates = rentDates;
+    this.openModal(this.modalService, this.sendsessionmodal, '', '');
+  }
 
+  sendSession() {
+    let sendSessionRequest = new NftSendSessionRequest();
+    sendSessionRequest.chainId = this.chainId;
+    sendSessionRequest.currency = this.currency;
+    sendSessionRequest.sessionId = this.sendSessionRentDates.sessionId;
+    sendSessionRequest.nftId = this.nftId;
+    sendSessionRequest.renter = this.renter;
+    sendSessionRequest.newRenter = this.newSendRenter;
+    sendSessionRequest.txKey = "1";
+    console.log(sendSessionRequest);
+
+    axios.post<TransferResponse>(this.rentalNftSendSessionUri, sendSessionRequest)
+      .then((res) => {
+        this.setTransferEndDelegate(this.delegateTransferEnd);
+        this.checkTransactionStatus(res.data.txnHash, sendSessionRequest.chainId, 0);
+      })
+      .catch((ex) => {
+        this.raiseError(ex);
+      });
+  }
+
+
+  grantAccessModal(rentDates: NftRentDate) {
+    this.grantAccessRentDates = rentDates;
+    this.openModal(this.modalService, this.grantaccessmodal, '', '');
+  }
+
+  grantAccess() {
+    let giveAccessRequest = new NftGiveAccessRequest();
+    giveAccessRequest.chainId = this.chainId;
+    giveAccessRequest.currency = this.currency;
+    giveAccessRequest.sessionId = this.grantAccessRentDates.sessionId;
+    giveAccessRequest.nftId = this.nftId;
+    giveAccessRequest.renter = this.renter;
+    giveAccessRequest.newRenter = this.newGrant;
+    giveAccessRequest.txKey = "1";
+    axios.post<TransferResponse>(this.rentalNftGiveAccessUri, giveAccessRequest)
+      .then((res) => {
+        this.setTransferEndDelegate(this.delegateTransferEnd);
+        this.checkTransactionStatus(res.data.txnHash, giveAccessRequest.chainId, 0);
+      })
+      .catch((ex) => {
+        this.raiseError(ex);
+      });
+  }
+
+  hasAccess(rentDates: NftRentDate) {
+    let accessRequest = new NftAccessRequest();
+    accessRequest.chainId = this.chainId;
+    accessRequest.currency = this.currency;
+    accessRequest.nftId = this.nftId;
+    accessRequest.renter = this.renter;
+    accessRequest.txKey = "1";
+    axios.post<TransferResponse>(this.rentalNftAccessUri, accessRequest)
+      .then((res) => {
+        this.setTransferEndDelegate(this.delegateHasAccess);
+        this.checkTransactionStatus(res.data.txnHash, accessRequest.chainId, 0);
+      })
+      .catch((ex) => {
+        this.raiseError(ex);
+      });
+  }
 }
 

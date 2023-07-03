@@ -73,6 +73,34 @@
             <button class="btn btn-secondary" (click)="rentNftModal()">Rent Nft</button>
           </div>
         </div>
+        <div class="row">
+          <div class="col-12">
+            <p>All Sessions for this nft {{currency}} - {{nftId}}</p>
+          </div>
+        </div>
+        <div class="row" *ngFor="let item of nftRentDateAll">
+          <div class="col-4" style="height: 20px;">
+            <p class="text-md-right">{{  item.nftDetail  }}</p>
+          </div>
+          <div class="col-md-8" style="height: 20px;">
+            <div class="row">
+              <div class="col-md-3" style="height: 20px;">
+                <p class="text-md-left align-middle">Start</p>
+              </div>
+              <div class="col-md-9" style="height: 20px;">
+                <p class="text-md-left align-middle">{{ item.startDate }}</p>
+              </div> 
+            </div>
+            <div class="row">
+              <div class="col-md-3" style="height: 20px;">
+                <p class="text-md-left align-middle">End</p>
+              </div>
+              <div class="col-md-9" style="height: 20px;">
+                <p class="text-md-left align-middle">{{ item.endDate }}</p>
+              </div> 
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-md-6 ml-auto mr-auto text-left">
         <div class="row">
@@ -96,6 +124,49 @@
               </div>
             </div>
         </div>
+        <div class="row">
+          <div class="col-md-12" style="height: 20px; font-weight: bolder;">
+            <p class="text-md-left align-middle">Rented Nfts</p>
+          </div> 
+        </div>
+        <div class="row">
+          <hr class="hr hr-blurry hr-primary" />
+        </div>
+        <div class="row" *ngFor="let item of nftRentDates">
+          <div class="col-md-4" style="height: 20px;">
+            <p class="text-md-right">{{  item.nftDetail  }}</p>
+          </div>
+          <div class="col-md-4" style="height: 20px;">
+            <div class="row">
+              <div class="col-md-3" style="height: 20px;">
+                <p class="text-md-left align-middle">Start</p>
+              </div>
+              <div class="col-md-9" style="height: 20px;">
+                <p class="text-md-left align-middle">{{ item.startDate }}</p>
+              </div> 
+            </div>
+            <div class="row">
+              <div class="col-md-3" style="height: 20px;">
+                <p class="text-md-left align-middle">End</p>
+              </div>
+              <div class="col-md-9" style="height: 20px;">
+                <p class="text-md-left align-middle">{{ item.endDate }}</p>
+              </div> 
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+              <div class="col-md-4">
+                <button [disabled]="saving" class="btn btn-primary btn-sm" style="padding: 1 !important; margin: 0 !important;"   (click)="sendSessionModal(item)">Send</button>
+              </div>
+              <div class="col-md-4">
+                <button [disabled]="saving" class="btn btn-secondary btn-sm" style="padding: 1 !important; margin: 0 !important;" (click)="grantAccessModal(item)" >Grant Access</button>
+              </div>
+              <div class="col-md-4">
+                <button [disabled]="saving" class="btn btn-secondary btn-sm" style="padding: 1 !important; margin: 0 !important;" (click)="hasAccess(item)" >Has Access</button>
+              </div>
+            </div>
+          </div>   
       </div>
     </div>
   </div>
@@ -123,7 +194,7 @@
                 Amount
               </span>
             </div>
-            <input type="text" formControlName="amount" name="amount" placeholder="Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+            <input type='number' step='0.1' value='0.000000' placeholder='0.000000' formControlName="amount" name="amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
           </div>
           <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
             <div class="input-group-prepend">
@@ -155,7 +226,7 @@
             Usd Balance
           </span>
       </div>
-      <input type="text" [value]="usdBalance" name="usdBalance" placeholder="Usd Balance" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+      <input type="text" [(ngModel)]="usdBalance" [value]="usdBalance" name="usdBalance" placeholder="Usd Balance" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
     </div>
     <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
       <div class="input-group-prepend">
@@ -163,7 +234,7 @@
             Total Amount
           </span>
       </div>
-      <input type="text" [value]="totalAmount" name="totalAmount" placeholder="Total Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+      <input type="text" [(ngModel)]="totalAmount" [value]="totalAmount" name="totalAmount" placeholder="Total Amount" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
     </div>
     <p *ngIf="!rentEnable()">
       Please transfer some usd fund from payment channels or exchange.
@@ -171,6 +242,53 @@
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-default" (click)="rentNft()">Rent</button>
+      <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+
+<ng-template #sendsession let-c="close" let-d="dismiss">
+  <div class="modal-header justify-content-center">
+      <button type="button" class="close" (click)="d('Cross click')">
+          <i class="now-ui-icons ui-1_simple-remove"></i>
+      </button>
+      <h4 class="title title-up">send session</h4>
+  </div>
+  <div class="modal-body">       
+    <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+      <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 140px;"  placeholder="Usd Balance">
+            New Renter
+          </span>
+      </div>
+      <input type="text" [(ngModel)]="newSendRenter" [value]="newSendRenter" name="newSendRenter" placeholder="New Renter" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+    </div> 
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="sendSession()">Send</button>
+      <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+
+<ng-template #grantaccess let-c="close" let-d="dismiss">
+  <div class="modal-header justify-content-center">
+      <button type="button" class="close" (click)="d('Cross click')">
+          <i class="now-ui-icons ui-1_simple-remove"></i>
+      </button>
+      <h4 class="title title-up">Send session to another renter</h4>
+  </div>
+  <div class="modal-body">       
+    <div class="input-group form-group-no-border input-lg" [ngClass]="{'input-group-focus':focus===true}">
+      <div class="input-group-prepend">
+          <span class="input-group-text" style="width: 140px;"  placeholder="Usd Balance">
+             Granting Renter
+          </span>
+      </div>
+      <input type="text" [(ngModel)]="newGrant" [value]="newGrant" name="newGrant" placeholder="New Grant" class="form-control" (focus)="focus1=true" (blur)="focus1=false"/>
+    </div> 
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="grantAccess()">Grant Access</button>
       <button type="button" class="btn btn-danger" (click)="c('Close click')">Close</button>
   </div>
 </ng-template>

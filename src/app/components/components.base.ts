@@ -6,7 +6,7 @@ import { CoinsResponse, TransferRequest, VerifyContractRequest } from '../models
 import { TerraConstants } from "./contants";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
-type TransferEnd = (ret: boolean, responseMessage: string) => void;
+type TransferEnd = (ret: boolean, responseMessage: string, data: UpdateChainSettle) => void;
 
 
 @Component({
@@ -35,7 +35,12 @@ export class BasePageComponent implements OnInit {
     rentalNftsUri = this.basePath + "rental/nfts?chainid={chainid}&classid={classid}&currency={currency}";
     rentalRentersUri = this.basePath + "rental/renters?chainid={chainid}&classid={classid}&currency={currency}&nftid={nftid}&sessionid={sessionid}";
     rentalSessionsUri = this.basePath + "rental/sessions?chainid={chainid}&classid={classid}&currency={currency}&nftid={nftid}&renter={renter}";
+    rentalSessionAllUri = this.basePath + "rental/sessions?chainid={chainid}&classid={classid}&currency={currency}&nftid={nftid}";
+    rentalWalletSessionsUri = this.basePath + "rental/sessions?chainid={chainid}&renter={renter}";
     rentalRentNftMintUri = this.basePath + "rental/rentnftmint";
+    rentalNftAccessUri = this.basePath + "rental/nftaccess";
+    rentalNftGiveAccessUri = this.basePath + "rental/nftgiveaccess";
+    rentalNftSendSessionUri = this.basePath + "rental/sendsession";
     txDetailUri = this.basePath + "tx/detail?txhash={txHash}&chainid={chainId}";
     delay = ms => new Promise(res => setTimeout(res, ms));
     coins: Map<string, CoinsResponse> = new Map<string, CoinsResponse>();
@@ -87,7 +92,7 @@ export class BasePageComponent implements OnInit {
         this.saving = true;
         axios
             .post<TransferResponse>(this.transferUri, transferRequest)
-            .then((res) => {
+            .then((res) => { 
                 return this.checkTransactionStatus(res.data.txnHash, transferRequest.chainId, 0);
             })
             .catch((ex) => {
@@ -119,17 +124,17 @@ export class BasePageComponent implements OnInit {
                 if (this.transferEndDelegate == null) {
                     alert("Successful transaction. " + res.data.error);
                 } else {
-                    this.transferEndDelegate(true, "Successful transaction.");
+                    this.transferEndDelegate(true, "Successful transaction.", res.data);
                 }
             } else {
                 alert(res.data.error);
-                this.transferEndDelegate(false, "Failed transaction");
+                this.transferEndDelegate(false, "Failed transaction", res.data);
             }
         }).catch((ex) => {
             this.delay(1000).then((v) => {
                 if (tryNumber > 3) {
                     alert(ex);
-                    this.transferEndDelegate(false, "Exceeded try count.");
+                    this.transferEndDelegate(false, "Exceeded try count.", undefined);
                     return;
                 }
                 this.checkTransactionStatus(txHash, chainId, tryNumber);

@@ -349,6 +349,44 @@ export class NftDetailResponse {
   nftDetails?: NftDetail[];
 }
 
+export class NftSendSessionRequest {
+  /**
+   * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
+   * @example "tokenfab-testnet"
+   */
+  chainId: string;
+  /**
+   * The NFT short name of the asset.
+   * @example "TOWER"
+   */
+  currency: string;
+  /**
+   * Renter address. Only nft owner can rent.
+   * @example "trm1fq5xzwrduvzqeccgjraakk9sql87uttdyr78e7"
+   */
+  newRenter: string;
+  /**
+   * Nft Id given by randomly but it must be unique.
+   * @example "NO1, 1, 2005"
+   */
+  nftId: string;
+  /**
+   * Renter address. Only nft owner can rent.
+   * @example "trm1fq5xzwrduvzqeccgjraakk9sql87uttdyr78e7"
+   */
+  renter: string;
+  /**
+   * Session Id, most likely start date of the rent.
+   * @example "202305201400"
+   */
+  sessionId: string;
+  /**
+   * the key given by client with any unique number to take response with that key. If not use you may set empty. Use it to take asynch response.
+   * @example "1"
+   */
+  txKey?: string;
+}
+
 export class NftGiveAccessRequest {
   /**
    * ChainId should be the same with the system. It could be taken from block explorer like sepolia, ethereum, cosmos-mainnet, tokenfab-mainnet
@@ -421,18 +459,22 @@ export class NftRentDate {
    * @format int64
    * @example 202305201400
    */
-  endDate: number;
+  endDate: number = 0;
   /**
    * Session Id, most likely start date of the rent.
    * @example "202305201400"
    */
-  sessionId: string;
+  nftDetail: string = '';
   /**
    * Start date. UTC Format: YYYYMMDDHHMM
    * @format int64
    * @example 202305141400
    */
-  startDate: number;
+  startDate: number = 0;
+
+  sessionId: string = '';
+  classId: string = '';
+  nftId: string = '';
 }
 
 export class NftRentMintRequest {
@@ -530,7 +572,7 @@ export class NftSessionRequest {
 }
 
 export class NftSessionResponse {
-  nftRentDates?: NftRentDate[];
+  nftRentDates?: NftRentDate[] = [];
 }
 
 /** Transfer request to transfer coin, nft, token and make payment. */

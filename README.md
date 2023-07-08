@@ -171,3 +171,14 @@ Instagram: <https://instagram.com/creativetimofficial>
 
 [CHANGELOG]: ./CHANGELOG.md
 [version-badge]: https://img.shields.io/badge/version-1.4.0-blue.svg
+
+
+# Docker deploy
+
+```
+docker build . -t terramirum/renter-ui
+```
+
+```
+docker run -d -p 8001:8001 terramirum/renter-ui
+```

@@ -1,5 +1,5 @@
 export const TerraConstants = {
-  chainId: "terramirum-localnet",
+  chainId: "terramirum-testnet",
   contractOwner: "trm1z60lkcwptx4yuykdp9fqcmr56qgeqdh8h4zz3g",
   Renters: ["trm17ulg0elrs4v32962awhaxcwh5qv7sv7vwmeusa",
             "trm1ksf8ef80l8qcgqsvkhs35tlj8k7lumv5wusg34",

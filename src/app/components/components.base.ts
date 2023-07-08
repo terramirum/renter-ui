@@ -23,7 +23,7 @@ type TransferEnd = (ret: boolean, responseMessage: string, data: UpdateChainSett
 
 export class BasePageComponent implements OnInit {
     saving = false;
-    basePath = "http://localhost:7171/";
+    basePath = "http://134.209.247.1:7070/";
     contractDeployUri = this.basePath + "contract/deploy";
     contractVerifyUri = this.basePath + "contract/verify";
     mintTokenUri = this.basePath + "wallet/deposit";

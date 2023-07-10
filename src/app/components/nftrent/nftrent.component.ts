@@ -44,7 +44,7 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   balances: BalanceResponse[];
   nftRentDates: NftRentDate[];
   nftRentDateAll: NftRentDate[];
-  
+
   withdrawalForm = new FormGroup({});
   hoveredDate: NgbDate | null = null;
 
@@ -143,6 +143,37 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     }
   }
 
+  delegateRentTransferEnd(ret: boolean, responseMessage: string, chainSettle: UpdateChainSettle) {
+    if (ret) { 
+      this.modalService.dismissAll();
+      if (chainSettle.isSuccessful){
+        let mintRequest = new NftRentMintRequest();
+        mintRequest.chainId = this.chainId;
+        mintRequest.currency = this.currency;
+        mintRequest.endDate = Number(this.endDate);
+        mintRequest.nftId = this.nftId;
+        mintRequest.renter = this.renter;
+        mintRequest.startDate = Number(this.startDate);
+        mintRequest.txKey = "1";
+
+        axios.post<TransferResponse>(this.rentalRentNftMintUri, mintRequest)
+          .then((res) => {
+            this.setTransferEndDelegate(this.delegateTransferEnd);
+            this.checkTransactionStatus(res.data.txnHash, mintRequest.chainId, 0);
+          })
+          .catch((ex) => {
+            this.raiseError(ex);
+          });
+      } else if (responseMessage != undefined && responseMessage.length > 0)
+        alert(responseMessage + "\n" + chainSettle.error);
+      else {
+        alert(chainSettle.error);
+      }
+    } else [
+      alert("Error with transfer " + ret + responseMessage)
+    ]
+  }
+
   delegateTransferEnd(ret: boolean, responseMessage: string, chainSettle: UpdateChainSettle) {
     if (ret) {
       this.balance();
@@ -164,13 +195,13 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   withdraw() {
     this.transferRequest = <TransferRequest>this.withdrawalForm.value;
 
-    
+
 
     this.transferRequest.amount = Math.trunc(parseFloat(this.transferRequest.amount) * Math.pow(10, 6)).toString()
     this.transferRequest.chainId = this.chainId;
     this.transferRequest.fromAddress = this.renter;
     this.transferRequest.txKey = "1";
-    this.transferRequest.memo = " "; 
+    this.transferRequest.memo = " ";
     this.setTransferEndDelegate(this.delegateTransferEnd);
     this.transfer(this.transferRequest);
   }
@@ -197,7 +228,7 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     let usd = "0";
     this.balances.forEach((item) => {
       if (item.currency == "TUSD") {
-        usd = this.getFormatedAmount(item.amount, Number(item.currency))
+        usd = String(item.amount / 1000000);// this.getFormatedAmount(item.amount, Number(item.currency))
       }
     });
 
@@ -225,24 +256,20 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
     // this.saving = true;
     // const req = <any>this.inputForm.value;
     // this.rentMintRequest = <NftRentMintRequest>this.inputForm.value;
+    if (Number(this.totalAmount) > Number(this.usdBalance)) {
+      alert("Not enough balance to purchase rent.");
+      return;
+    }
 
-    let mintRequest = new NftRentMintRequest();
-    mintRequest.chainId = this.chainId;
-    mintRequest.currency = this.currency;
-    mintRequest.endDate = Number(this.endDate);
-    mintRequest.nftId = this.nftId;
-    mintRequest.renter = this.renter;
-    mintRequest.startDate = Number(this.startDate);
-    mintRequest.txKey = "1";
-
-    axios.post<TransferResponse>(this.rentalRentNftMintUri, mintRequest)
-      .then((res) => {
-        this.setTransferEndDelegate(this.delegateTransferEnd);
-        this.checkTransactionStatus(res.data.txnHash, mintRequest.chainId, 0);
-      })
-      .catch((ex) => {
-        this.raiseError(ex);
-      });
+    let req: TransferRequest = new TransferRequest();
+    req.chainId = TerraConstants.chainId;
+    req.amount = String(Number(this.totalAmount) * 1000000);
+    req.currency = "TUSD";
+    req.fromAddress = this.renter;
+    req.toAddress = TerraConstants.contractOwner;
+    req.txKey = "1";
+    this.setTransferEndDelegate(this.delegateRentTransferEnd);
+    this.transfer(req);
   }
 
   walletSessions() {

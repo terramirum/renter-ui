@@ -79,10 +79,10 @@
           </div>
         </div>
         <div class="row" *ngFor="let item of nftRentDateAll">
-          <div class="col-4" style="height: 20px;">
+          <div class="col-4">
             <p class="text-md-right">{{  item.nftDetail  }}</p>
           </div>
-          <div class="col-md-8" style="height: 20px;">
+          <div class="col-md-8">
             <div class="row">
               <div class="col-md-3" style="height: 20px;">
                 <p class="text-md-left align-middle">Start</p>
@@ -123,6 +123,7 @@
                 <button [disabled]="saving" class="btn btn-secondary btn-sm" style="padding: 1 !important; margin: 0 !important;" (click)="faucet(item.currency)" >Faucet</button>
               </div>
             </div>
+          </div>
         </div>
         <div class="row">
           <div class="col-md-12" style="height: 20px; font-weight: bolder;">

@@ -88,7 +88,7 @@
                 <p class="text-md-left align-middle">Start</p>
               </div>
               <div class="col-md-9" style="height: 20px;">
-                <p class="text-md-left align-middle">{{ item.startDate }}</p>
+                <p class="text-md-left align-middle">{{ getFormattedDate(item.startDate) }}</p>
               </div> 
             </div>
             <div class="row">
@@ -96,7 +96,7 @@
                 <p class="text-md-left align-middle">End</p>
               </div>
               <div class="col-md-9" style="height: 20px;">
-                <p class="text-md-left align-middle">{{ item.endDate }}</p>
+                <p class="text-md-left align-middle">{{ getFormattedDate(item.endDate) }}</p>
               </div> 
             </div>
           </div>
@@ -142,16 +142,16 @@
               <div class="col-md-3" style="height: 20px;">
                 <p class="text-md-left align-middle">Start</p>
               </div>
-              <div class="col-md-9" style="height: 20px;">
-                <p class="text-md-left align-middle">{{ item.startDate }}</p>
+              <div class="col-md-9" style="height: 45px;">
+                <p class="text-md-left align-middle">{{ getFormattedDate(item.startDate) }}</p>
               </div> 
             </div>
             <div class="row">
               <div class="col-md-3" style="height: 20px;">
                 <p class="text-md-left align-middle">End</p>
               </div>
-              <div class="col-md-9" style="height: 20px;">
-                <p class="text-md-left align-middle">{{ item.endDate }}</p>
+              <div class="col-md-9" style="height: 45px;">
+                <p class="text-md-left align-middle">{{ getFormattedDate(item.endDate) }}</p>
               </div> 
             </div>
           </div>

@@ -144,9 +144,9 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
   }
 
   delegateRentTransferEnd(ret: boolean, responseMessage: string, chainSettle: UpdateChainSettle) {
-    if (ret) { 
+    if (ret) {
       this.modalService.dismissAll();
-      if (chainSettle.isSuccessful){
+      if (chainSettle.isSuccessful) {
         let mintRequest = new NftRentMintRequest();
         mintRequest.chainId = this.chainId;
         mintRequest.currency = this.currency;
@@ -169,7 +169,7 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
       else {
         alert(chainSettle.error);
       }
-    } else [
+    } else[
       alert("Error with transfer " + ret + responseMessage)
     ]
   }
@@ -368,6 +368,11 @@ export class NftRentComponent extends BasePageComponent implements OnInit, After
       .catch((ex) => {
         this.raiseError(ex);
       });
+  }
+
+  getFormattedDate(str: string) {
+    const date = moment(str, 'YYYYMMDDhhmm').toDate();
+    return date.toDateString() + " - " + date.toLocaleTimeString()
   }
 }
 
